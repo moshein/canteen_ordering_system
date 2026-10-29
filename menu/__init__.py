@@ -1,3 +1,5 @@
+## Author: Oshein P. Montimor (module: menu)
+
 from contracts import IMenu
 
 class Food(IMenu):

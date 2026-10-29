@@ -51,11 +51,16 @@ class IMenu(ABC):
         pass
 
 class ICustomer(ABC):
+    ## customer names A, B, Cs (i think during testing rani)
+
     @abstractmethod
     def sample_func(self):
         pass
 
 class IPayment(ABC):
+    ## cash
+    ## e-wallet
+
     @abstractmethod
     def sample_func(self):
         pass
@@ -66,6 +71,8 @@ class IKitchen(ABC):
         pass
 
 class IOrder(ABC):
+    ## add order_number (since each orders kay unique)
+
     @abstractmethod
     def sample_func(self):
         pass
