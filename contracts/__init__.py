@@ -1,11 +1,70 @@
 '''
-Contracts
+Contract
 
-What it is:
-The ABCs and custom exceptions every module codes against
+What this file is:
+The ABCs and custom exceptions every module codes against in our canteen ordering system.
 
-Who writes it:
-Whole group, together before anyone starts coding
+People tasked in writing the contract: (dont forget to transfer it to readme.md)
+Montimor - IMenu
+Lauzon - ICustomer
+Odarve - IPayment
+Macaya - IKitchen
+Casuboc - IOrder
+
 '''
 
-# from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod
+
+class IMenu(ABC):
+    @abstractmethod
+    def food_item(self, item: str, price: int):
+        '''Creates a food item and its price. Price shouldnt be zero or negative'''
+        pass
+
+    @abstractmethod
+    def add_item(self, item, quantity: int):
+        '''Adds food item and its quantity to the menu. The quantity shouldn't be zero or negative'''
+        pass
+
+    @abstractmethod
+    def remove_item(self, item: str):
+        '''Removes a food item and its quantity to the menu'''
+        pass
+
+    @property
+    @abstractmethod
+    def get_menu(self):
+        '''Returns all menu entries including the temporarily out of stock items'''
+        pass
+
+    @property
+    @abstractmethod
+    def available_items(self):
+        '''Returns the food items available in the menu'''
+        pass
+
+    @property
+    @abstractmethod
+    def unavailable_items(self):
+        '''Returns the unavailable food items in the canteen'''
+        pass
+
+class ICustomer(ABC):
+    @abstractmethod
+    def sample_func(self):
+        pass
+
+class IPayment(ABC):
+    @abstractmethod
+    def sample_func(self):
+        pass
+
+class IKitchen(ABC):
+    @abstractmethod
+    def sample_func(self):
+        pass
+
+class IOrder(ABC):
+    @abstractmethod
+    def sample_func(self):
+        pass
