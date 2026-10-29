@@ -16,10 +16,11 @@ Casuboc - IOrder
 from abc import ABC, abstractmethod
 
 class IMenu(ABC):
-    @abstractmethod
-    def food_item(self, item: str, price: int):
-        '''Creates a food item and its price. Price shouldnt be zero or negative'''
-        pass
+    # @abstractmethod
+    # def food_item(self, name: str, price: int):
+    #     '''Creates a food item and its price. Price shouldnt be zero or negative'''
+    #     pass
+    ## i think dili ata ni i-add?? not sure :3
 
     @abstractmethod
     def add_item(self, item, quantity: int):
