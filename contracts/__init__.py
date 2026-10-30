@@ -16,25 +16,19 @@ Casuboc - IOrder
 from abc import ABC, abstractmethod
 
 class IMenu(ABC):
-    # @abstractmethod
-    # def food_item(self, name: str, price: int):
-    #     '''Creates a food item and its price. Price shouldnt be zero or negative'''
-    #     pass
-    ## i think dili ata ni i-add?? not sure :3
-
     @abstractmethod
     def add_item(self, item, quantity: int):
         '''Adds food item and its quantity to the menu. The quantity shouldn't be zero or negative'''
         pass
 
     @abstractmethod
-    def remove_item(self, item: str):
+    def remove_item(self, item_name: str):
         '''Removes a food item and its quantity to the menu'''
         pass
 
     @property
     @abstractmethod
-    def get_menu(self):
+    def menu(self):
         '''Returns all menu entries including the temporarily out of stock items'''
         pass
 
