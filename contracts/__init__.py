@@ -85,10 +85,3 @@ class IKitchen(ABC):
     def pending_orders(self) -> tuple:
         """Return tuple of pending orders."""
         pass
-
-class IOrder(ABC):
-    ## add order_number (since each orders kay unique)
-
-    @abstractmethod
-    def sample_func(self):
-        pass
