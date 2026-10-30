@@ -1,7 +1,7 @@
 ## Author: Oshein P. Montimor (module: menu)
 
 from contracts import IMenu
-#456454
+
 class Food(IMenu):
     def __init__(self, name: str, price: int):
         ## price shouldnt be zero dont forget
