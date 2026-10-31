@@ -5,7 +5,7 @@ from contracts import ICustomer
 class Customer(ICustomer):
 
     def __init__(self, name: str):
-        """Initialize a customer with their name."""
+        
 
         if not isinstance(name, str) or not name.strip():
             raise ValueError("Customer name cannot be empty.")
