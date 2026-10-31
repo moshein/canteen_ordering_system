@@ -51,12 +51,28 @@ class ICustomer(ABC):
     def sample_func(self):
         pass
 
+class IOrder(ABC):
+    @property
+    @abstractmethod
+    def total(self) -> float:
+        """Return the final payable amount in pesos."""
+        pass
+
 class IPayment(ABC):
-    ## cash
-    ## e-wallet
+    @property
+    @abstractmethod
+    def method(self) -> str:
+        """Return 'cash' or 'e-wallet'."""
+        pass
 
     @abstractmethod
-    def sample_func(self):
+    def pay(self, order: "IOrder") -> float:
+        """Pay once for an order that implements IOrder.
+
+        Returns cash change (cash) or 0.0 (e-wallet), in pesos.
+        Raises ValueError for invalid order or amount.
+        Raises CanteenError for insufficient funds or repeat payment.
+        """
         pass
 
 class CanteenError(Exception):
