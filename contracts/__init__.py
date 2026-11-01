@@ -51,7 +51,6 @@ class ICustomer(ABC):
     def sample_func(self):
         pass
 
-
 class IOrder(ABC):
 
     @abstractmethod
