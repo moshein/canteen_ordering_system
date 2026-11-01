@@ -51,11 +51,29 @@ class ICustomer(ABC):
     def sample_func(self):
         pass
 
+
 class IOrder(ABC):
+
+    @abstractmethod
+    def create_order(self, order_number: str, item: str) -> None:
+        """Create a new order."""
+        pass
+
+    @abstractmethod
+    def cancel_order(self, order_number: str) -> None:
+        """Cancel an existing order."""
+        pass
+
+    @property
+    @abstractmethod
+    def active_orders(self) -> tuple:
+        """Return tuple of active orders."""
+        pass
+
     @property
     @abstractmethod
     def total(self) -> float:
-        """Return the final payable amount in pesos."""
+        """Return the total amount of the order."""
         pass
 
 class IPayment(ABC):
@@ -97,26 +115,3 @@ class IKitchen(ABC):
         pass
 
 
-class IOrder(ABC):
-
-    @abstractmethod
-    def create_order(self, order_number: str, item: str) -> None:
-        """Create a new order."""
-        pass
-
-    @abstractmethod
-    def cancel_order(self, order_number: str) -> None:
-        """Cancel an existing order."""
-        pass
-
-    @property
-    @abstractmethod
-    def active_orders(self) -> tuple:
-        """Return tuple of active orders."""
-        pass
-
-    @property
-    @abstractmethod
-    def total(self) -> float:
-        """Return the total amount of the order."""
-        pass
