@@ -1,13 +1,13 @@
 # Author: Nelle Lauzon (module: customer)
 
-from contracts import ICustomer
+from contracts import ICustomer, IOrder, CanteenError
 
 
 class Customer(ICustomer):
     """
     Represents a customer in the canteen ordering system.
 
-    Stores the customer's name and customer type.
+    Stores customer information and manages associated order IDs.
     """
 
     VALID_CUSTOMER_TYPES = (
@@ -17,12 +17,17 @@ class Customer(ICustomer):
         "Visitor"
     )
 
-    def __init__(self, name: str, customer_type: str):
+    def __init__(
+        self,
+        name: str,
+        customer_type: str,
+        order: IOrder
+    ):
         """
-        Initialize a customer with their name and customer type.
+        Initialize a customer with their name, type, and order reference.
 
         Raises:
-            ValueError: If the name or customer type is invalid.
+            ValueError: If the customer information or order is invalid.
         """
 
         if not isinstance(name, str) or not name.strip():
@@ -35,9 +40,14 @@ class Customer(ICustomer):
 
         if customer_type not in self.VALID_CUSTOMER_TYPES:
             raise ValueError("Invalid customer type.")
-            
+
+        if not isinstance(order, IOrder):
+            raise ValueError("Order must implement IOrder.")
+
         self._name = name.strip()
         self._customer_type = customer_type
+        self._order = order
+        self._order_ids = []
 
     @property
     def name(self) -> str:
@@ -49,13 +59,53 @@ class Customer(ICustomer):
         """Return the customer's type."""
         return self._customer_type
 
-    def sample_func(self):
+    @property
+    def order_ids(self) -> tuple:
+        """Return an immutable collection of the customer's order IDs."""
+        return tuple(self._order_ids)
+
+    def add_order(self, order_id: str) -> None:
         """
-        Temporary implementation of the current ICustomer
-        contract placeholder.
+        Associate an order ID with this customer.
+
+        Raises:
+            ValueError: If the order ID is invalid.
+            CanteenError: If the order ID is already associated.
         """
-        return f"{self._name} ({self._customer_type})"
+
+        if not isinstance(order_id, str) or not order_id.strip():
+            raise ValueError("Order ID cannot be empty.")
+
+        order_id = order_id.strip()
+
+        if order_id in self._order_ids:
+            raise CanteenError(
+                f"Order '{order_id}' is already associated with this customer."
+            )
+
+        self._order_ids.append(order_id)
+
+    def remove_customer(self) -> None:
+        """
+        Check whether this customer can be removed.
+
+        Raises:
+            CanteenError: If the customer still has pending orders.
+        """
+
+        pending_orders = self._order.active_orders
+
+        for order_id in self._order_ids:
+            if order_id in pending_orders:
+                raise CanteenError(
+                    "Cannot remove a customer with pending orders."
+                )
+
+        self._order_ids.clear()
 
     def __str__(self) -> str:
         """Return a readable description of the customer."""
-        return f"Customer: {self._name} | Type: {self._customer_type}"
+        return (
+            f"Customer: {self._name} | "
+            f"Type: {self._customer_type}"
+        )
