@@ -6,17 +6,35 @@ from contracts import IOrder, IPayment, CanteenError
 from payment import CashPayment, EWalletPayment
 
 
+
 class FakeOrder(IOrder):
-    """A small IOrder implementation used ani nga tests."""
+    """Fake order for testing payments without the real Order Module."""
 
     def __init__(self, total):
-        """Store a sample total (including invalid values for validation tests)."""
         self._total = total
+        self._active_orders = ()
 
     @property
-    def total(self):
-        """Return the sample total."""
+    def total(self) -> float:
+        """Return the amount the customer must pay."""
         return self._total
+
+    @property
+    def active_orders(self) -> tuple:
+        """Return active orders."""
+        return self._active_orders
+
+    def create_order(self, order_number: str, item: str) -> None:
+        """Not used in Payment tests."""
+        raise NotImplementedError(
+            "Order creation is not part of these tests."
+        )
+
+    def cancel_order(self, order_number: str) -> None:
+        """Not used in Payment tests."""
+        raise NotImplementedError(
+            "Order cancellation is not part of these tests."
+        )
 
 
 class TestPayment(unittest.TestCase):
