@@ -96,7 +96,9 @@ class IKitchen(ABC):
         """Return tuple of pending orders."""
         pass
 
+
 class IOrder(ABC):
+
     @abstractmethod
     def create_order(self, order_number: str, item: str) -> None:
         """Create a new order."""
@@ -111,4 +113,10 @@ class IOrder(ABC):
     @abstractmethod
     def active_orders(self) -> tuple:
         """Return tuple of active orders."""
+        pass
+
+    @property
+    @abstractmethod
+    def total(self) -> float:
+        """Return the total amount of the order."""
         pass
