@@ -36,8 +36,6 @@ class FakeOrder(IOrder):
 
 
 class TestPayment(unittest.TestCase):
-    """Check cash, e-wallet, contract usage, and payment failure rules."""
-
     def test_cash_payment_calculates_change(self):
         payment = CashPayment(200)
         self.assertEqual(payment.pay(FakeOrder(150)), 50.0)
