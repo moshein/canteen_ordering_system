@@ -79,3 +79,20 @@ class IKitchen(ABC):
     def pending_orders(self) -> tuple:
         """Return tuple of pending orders."""
         pass
+
+class IOrder(ABC):
+    @abstractmethod
+    def create_order(self, order_number: str, item: str) -> None:
+        """Create a new order."""
+        pass
+
+    @abstractmethod
+    def cancel_order(self, order_number: str) -> None:
+        """Cancel an existing order."""
+        pass
+
+    @property
+    @abstractmethod
+    def active_orders(self) -> tuple:
+        """Return tuple of active orders."""
+        pass
