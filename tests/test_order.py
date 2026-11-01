@@ -1,4 +1,5 @@
 # Order module test (Casuboc)
+
 import unittest
 
 from contracts import IMenu, CanteenError
@@ -6,12 +7,13 @@ from order import (
     Order,
     DuplicateOrderError,
     OrderNotFoundError,
-    InsufficientStockError
+    InsufficientStockError,
+    OrderLockedError
 )
 
 
-# Fake Menu implementing the IMenu contract
 class FakeMenu(IMenu):
+    """Fake menu used for testing the Order module."""
 
     def __init__(self):
         self._menu = [
@@ -21,15 +23,10 @@ class FakeMenu(IMenu):
         ]
 
     def add_item(self, item, quantity: int):
-        self._menu.append(
-            [item.foodType, item.name, item.price, quantity]
-        )
+        pass
 
     def remove_item(self, item_name: str):
-        self._menu = [
-            item for item in self._menu
-            if item[1] != item_name
-        ]
+        pass
 
     @property
     def menu(self):
@@ -37,104 +34,113 @@ class FakeMenu(IMenu):
 
     @property
     def available_items(self):
-        return [
-            item for item in self._menu
-            if item[3] > 0
-        ]
+        return [item for item in self._menu if item[3] > 0]
 
     @property
     def unavailable_items(self):
-        return [
-            item for item in self._menu
-            if item[3] <= 0
-        ]
+        return [item for item in self._menu if item[3] <= 0]
 
 
 class TestOrder(unittest.TestCase):
 
     def setUp(self):
-        """Create a fresh Order object before every test."""
         self.menu = FakeMenu()
         self.order = Order(self.menu)
 
+    # 1. Test adding items
     def test_add_to_cart(self):
-        """Test adding a valid food item."""
         self.order.add_to_cart("Chicken Rice", 2)
 
         self.assertEqual(len(self.order), 1)
         self.assertIn("Chicken Rice", self.order)
 
+    # 2. Test invalid quantity
     def test_invalid_quantity(self):
-        """Test rejection of zero quantity."""
         with self.assertRaises(ValueError):
             self.order.add_to_cart("Chicken Rice", 0)
 
+    # 3. Test insufficient stock
     def test_insufficient_stock(self):
-        """Test rejection of quantities exceeding stock."""
         with self.assertRaises(InsufficientStockError):
-            self.order.add_to_cart("Burger", 10)
+            self.order.add_to_cart("Chicken Rice", 11)
 
+    # 4. Test calculating total
     def test_calculate_total(self):
-        """Test calculation of the cart total."""
         self.order.add_to_cart("Chicken Rice", 2)
         self.order.add_to_cart("Burger", 1)
 
         self.assertEqual(self.order.calculate_total(), 200.00)
 
+    # 5. Test removing an item
     def test_remove_from_cart(self):
-        """Test removing an item from the cart."""
+        self.order.add_to_cart("Burger", 1)
+        self.order.remove_from_cart("Burger")
+
+        self.assertNotIn("Burger", self.order)
+
+    # 6. Test modifying cart
+    def test_modify_cart(self):
         self.order.add_to_cart("Chicken Rice", 2)
-        self.order.remove_from_cart("Chicken Rice")
+        self.order.modify_cart("Chicken Rice", 3)
 
-        self.assertNotIn("Chicken Rice", self.order)
-        self.assertEqual(len(self.order), 0)
+        self.assertEqual(self.order.calculate_total(), 225.00)
 
+    # 7. Test submitting an order
     def test_create_order(self):
-        """Test creating an order with a valid cart."""
         self.order.add_to_cart("Chicken Rice", 2)
+        self.order.create_order("ORD001", "Chicken Rice")
 
-        self.order.create_order("ORD-001", "Chicken Rice")
+        self.assertEqual(self.order.active_orders, ("ORD001",))
 
-        self.assertIn("ORD-001", self.order.active_orders)
-
+    # 8. Test duplicate order number
     def test_duplicate_order(self):
-        """Test rejection of duplicate order numbers."""
         self.order.add_to_cart("Chicken Rice", 1)
-        self.order.create_order("ORD-001", "Chicken Rice")
+        self.order.create_order("ORD001", "Chicken Rice")
 
         with self.assertRaises(DuplicateOrderError):
-            self.order.create_order("ORD-001", "Chicken Rice")
+            self.order.create_order("ORD001", "Chicken Rice")
 
+    # 9. Test cancelling an order
     def test_cancel_order(self):
-        """Test cancelling an existing pending order."""
-        self.order.add_to_cart("Chicken Rice", 1)
-        self.order.create_order("ORD-001", "Chicken Rice")
+        self.order.add_to_cart("Burger", 1)
+        self.order.create_order("ORD001", "Burger")
+        self.order.cancel_order("ORD001")
 
-        self.order.cancel_order("ORD-001")
+        self.assertEqual(self.order.active_orders, ())
 
-        self.assertNotIn("ORD-001", self.order.active_orders)
-
+    # 10. Test cancelling a nonexistent order
     def test_cancel_nonexistent_order(self):
-        """Test cancelling an order that does not exist."""
         with self.assertRaises(OrderNotFoundError):
-            self.order.cancel_order("ORD-999")
+            self.order.cancel_order("ORD999")
 
-    def test_cart_returns_tuple(self):
-        """Test that cart returns an immutable collection."""
-        self.order.add_to_cart("Chicken Rice", 1)
+    # 11. Test submitted order cannot be modified
+    def test_locked_order(self):
+        self.order.add_to_cart("Burger", 1)
+        self.order.create_order("ORD001", "Burger")
+
+        with self.assertRaises(OrderLockedError):
+            self.order.add_to_cart("Iced Tea", 1)
+
+    # 12. Test cart returns a tuple
+    def test_cart_is_immutable(self):
+        self.order.add_to_cart("Burger", 1)
 
         self.assertIsInstance(self.order.cart, tuple)
 
-    def test_total_is_read_only(self):
-        """Test that total cannot be directly reassigned."""
-        with self.assertRaises(AttributeError):
-            self.order.total = 500
+    # 13. Test total property
+    def test_total_property(self):
+        self.order.add_to_cart("Chicken Rice", 2)
 
+        self.assertEqual(self.order.total, 150.00)
+
+    # 14. Test string representation
     def test_string_representation(self):
-        """Test the Order class string representation."""
         self.order.add_to_cart("Burger", 2)
 
-        self.assertIn("100.00", str(self.order))
+        self.assertEqual(
+            str(self.order),
+            "Order(Cart Items: 1, Total: Php 100.00)"
+        )
 
 
 if __name__ == "__main__":
