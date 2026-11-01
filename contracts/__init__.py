@@ -51,13 +51,6 @@ class ICustomer(ABC):
     def sample_func(self):
         pass
 
-class IOrder(ABC):
-    @property
-    @abstractmethod
-    def total(self) -> float:
-        """Return the final payable amount in pesos."""
-        pass
-
 class IPayment(ABC):
     @property
     @abstractmethod
