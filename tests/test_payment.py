@@ -8,8 +8,6 @@ from payment import CashPayment, EWalletPayment
 
 
 class FakeOrder(IOrder):
-    """Fake order for testing payments without the real Order Module."""
-
     def __init__(self, total):
         self._total = total
         self._active_orders = ()
