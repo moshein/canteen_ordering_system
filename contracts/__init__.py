@@ -47,8 +47,16 @@ class IMenu(ABC):
 class ICustomer(ABC):
     ## customer names A, B, Cs (i think during testing rani)
 
+    @property
     @abstractmethod
-    def sample_func(self):
+    def name(self) -> str:
+        """Returns the customer's name."""
+        pass
+
+    @property
+    @abstractmethod
+    def customer_type(self) -> str:
+        """Returns the customer's category."""
         pass
 
 class IPayment(ABC):
