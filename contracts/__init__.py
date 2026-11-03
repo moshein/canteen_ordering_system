@@ -63,6 +63,7 @@ class ICustomer(ABC):
     def customer_type(self) -> str:
         """Returns the customer's category."""
         pass
+    ###
 
 class IOrder(ABC):
 
