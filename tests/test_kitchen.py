@@ -1,3 +1,4 @@
+# tests/test_kitchen.py (Macaya)
 import unittest
 from kitchen import KitchenQueue, KitchenFullError, OrderNotFoundError
 
@@ -46,5 +47,5 @@ class TestKitchenQueue(unittest.TestCase):
         """Test string representation dunder method."""
         self.assertIn("KitchenQueue", str(self.kitchen))
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     unittest.main()
