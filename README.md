@@ -12,9 +12,10 @@ The Canteen Ordering System is a Python-based application designed to manage foo
 |---|---|---|
 | Menu | Montimor | `IMenu` |
 | Customer | Lauzon | `ICustomer` |
+| Order | Casuboc | `IOrder` |
 | Payment | Odarve | `IPayment` |
 | Kitchen | Macaya | `IKitchen` |
-| Order | Casuboc | `IOrder` |
+
 
 ## Project Structure
 
