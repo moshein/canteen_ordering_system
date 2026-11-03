@@ -158,7 +158,17 @@ class Menu(IMenu):
 
         if type(item_name) is not str:
             raise TypeError("Item name must be a string.")
-        
+
+        menu = self._menu
+
+        for item in menu:
+            if item[1] == item_name:
+                menu.remove(item)
+
+                return f"{item_name} has been removed from the menu"
+
+        raise ItemNotFoundError(f"{item_name} doesn't exist in the menu")
+
 
     # def add_item(self, item: Food, quantity: int):
 
@@ -223,44 +233,44 @@ class Menu(IMenu):
 
         raise ValueError(f"{item_name} doesn't exist in the menu")
 
-    @property
-    def menu(self):
+    # @property
+    # def menu(self):
         
-        if not self._menu:
-            raise ValueError("Menu is empty.")
+    #     if not self._menu:
+    #         raise ValueError("Menu is empty.")
 
-        return self._menu.copy()
+    #     return self._menu.copy()
 
-        # ### uncomment this part if they dont need this function for data
+    #     # ### uncomment this part if they dont need this function for data
                         
-        # menu_meal = ""
-        # menu_ready = ""
+    #     # menu_meal = ""
+    #     # menu_ready = ""
 
-        # for item in self._menu:
+    #     # for item in self._menu:
 
-        #     if item[0] == "Meal":
-        #         menu_meal += f"{item[1]} - Php {item[2]} (Stocks available: {item[3]})\n"
+    #     #     if item[0] == "Meal":
+    #     #         menu_meal += f"{item[1]} - Php {item[2]} (Stocks available: {item[3]})\n"
 
-        #     if item[0] == "Ready-To-Eat":
-        #         menu_ready += f"{item[1]} - Php {item[2]} (Stocks available: {item[3]})\n"
+    #     #     if item[0] == "Ready-To-Eat":
+    #     #         menu_ready += f"{item[1]} - Php {item[2]} (Stocks available: {item[3]})\n"
 
-        # menu_display = "Food Meals: \n" + menu_meal + "\n\n" + "Ready-To-Eat Foods: \n" + menu_ready
+    #     # menu_display = "Food Meals: \n" + menu_meal + "\n\n" + "Ready-To-Eat Foods: \n" + menu_ready
 
-        # return menu_display
+    #     # return menu_display
 
-    @property
-    def available_items(self):
+    # @property
+    # def available_items(self):
 
-        if not self._menu:
-            raise ValueError("Menu is empty. Add more food items.")
+    #     if not self._menu:
+    #         raise ValueError("Menu is empty. Add more food items.")
 
-        items_available_list = []
+    #     items_available_list = []
 
-        for item in self._menu:
-            if item[3] > 0:
-                items_available_list.append(item)
+    #     for item in self._menu:
+    #         if item[3] > 0:
+    #             items_available_list.append(item)
 
-        return items_available_list
+    #     return items_available_list
 
         
 
