@@ -70,7 +70,7 @@ python main.py
 To run all module tests:
 
 ```bash
-python -m unittest discover -s tests -p "test_*.py" -v
+python -m unittest discover tests -v
 ```
 
 To run an individual module's tests, for example Customer:
