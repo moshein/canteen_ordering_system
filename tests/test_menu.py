@@ -1,6 +1,6 @@
 import unittest
 
-from menu import Food, Meal, ReadyToEat, Menu
+from menu import Food, Meal, ReadyToEat, Menu, ItemNotFoundError, EmptyMenuError, InvalidQuantityError, PriceMismatchError 
 
 class TestFood(unittest.TestCase):
 
@@ -10,7 +10,7 @@ class TestFood(unittest.TestCase):
 
         self.assertEqual(burger.name, "Burger")
         self.assertEqual(burger.price, 90.00)
-        self.assertEqual(burger.foodType, "Meal")
+        self.assertEqual(burger.food_type, "Meal")
 
     ## testing whether ReadyToEat object is created successfully
     def test_create_readyToEat(self):
@@ -18,7 +18,7 @@ class TestFood(unittest.TestCase):
 
         self.assertEqual(fita.name, "Fita")
         self.assertEqual(fita.price, 15.00)
-        self.assertEqual(fita.foodType, "Ready-To-Eat")
+        self.assertEqual(fita.food_type, "Ready-To-Eat")
 
     ## testing whether invalid name type raises error
     def test_invalid_name(self):
@@ -49,11 +49,58 @@ class TestMenu(unittest.TestCase):
     def test_add_item(self):
         self.menu.add_item(self.burger, 5)
         self.assertEqual(len(self.menu.menu), 1)
+        self.assertEqual(self.menu.menu[0][1], "Burger")
+        self.assertEqual(self.menu.menu[0][2], 90.00)
+        self.assertEqual(self.menu.menu[0][3], 5)
 
     ## testing if invalid item raises error
     def test_invalid_item(self):
         with self.assertRaises(TypeError):
             self.menu.add_item("Burger", 5)
+
+    ## testing if zero quantity raises error
+    def test_zero_quantity(self):
+        with self.assertRaises(InvalidQuantityError):
+            self.menu.add_item(self.burger, 0)
+
+    ## testing if negative quantity raises error
+    def test_negative_quantity(self):
+        with self.assertRaises(InvalidQuantityError):
+            self.menu.add_item(self.burger, -3)
+
+    ## testing if duplicate food item increases existing quantity
+    def test_duplicate_item(self):
+        self.menu.add_item(self.burger, 5)
+        self.menu.add_item(self.burger, 3)
+
+        self.assertEqual(len(self.menu.menu), 1)
+        self.assertEqual(self.menu.menu[0][3], 8)
+
+    ## testing if duplicate food item with different price raises error
+    def test_duplicate_item_different_price(self):
+        self.menu.add_item(self.burger, 5)
+        new_burger = Meal("Burger", 100)
+
+        with self.assertRaises(PriceMismatchError):
+            self.menu.add_item(new_burger, 3)
+
+        self.assertEqual(self.menu.menu[0][2], 90.00)
+        self.assertEqual(self.menu.menu[0][3], 5)
+
+    ## testing if has_item detects existing food item
+    def test_has_item(self):
+        self.menu.add_item(self.burger, 5)
+
+        self.assertTrue(self.menu.has_item("Burger"))
+        self.assertFalse(self.menu.has_item("Pizza"))
+
+    ## testing if remove_item successfully removes a food item
+    def test_remove_item(self):
+        self.menu.add_item(self.burger, 5)
+        self.menu.remove_item("Burger")
+
+        self.assertEqual(len(self.menu._menu), 0)
+
 
     ## testing if the copy() works in menu
     def test_menu_copy(self):

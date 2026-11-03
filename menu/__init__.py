@@ -1,6 +1,33 @@
 ## Author: Oshein P. Montimor (module: menu)
 
-from contracts import IMenu
+from contracts import IMenu, CanteenError
+
+class ItemNotFoundError(CanteenError):
+    '''Raised when food item is not found in the menu'''
+    pass
+
+class EmptyMenuError(CanteenError):
+    '''Raised when menu is empty.'''
+    pass
+
+class InvalidQuantityError(CanteenError):
+    '''Raised when quantity is invalid, especially when the number input should not be zero or negative.'''
+    pass
+
+class PriceMismatchError(CanteenError):
+    '''Raised when the price of a food item in the menu does not match the expected price.'''
+    pass
+
+class Food:
+    '''Represents a food item in the canteen menu'''
+
+    def __init__(self, name: str, price: int|float):
+
+        if type(name) is not str:
+            raise TypeError("Name must be a string")
+
+        if not name.strip():
+            raise ValueError("Name cannot be empty or whitespace.")
 
 class Food:
     def __init__(self, name: str, price: int|float):
@@ -13,6 +40,29 @@ class Food:
 
         if price <= 0:
             raise ValueError("Price must be greater than zero.")
+
+        self._name = name.strip()
+        self._price = round(float(price), 2)
+        self._type = ""
+
+    def __str__(self):
+        return f"{self._name} - Php {self._price}"
+
+    @property
+    def name(self):
+        '''Returns the name of the food item'''
+        return self._name
+
+    @property
+    def price(self):
+        '''Returns the price of the food item'''
+        return self._price
+
+    @property
+    def food_type(self):
+        '''Returns the type of the food item'''
+        return self._type
+
 
         self._name = name
         self._price = round(float(price), 2)
@@ -54,9 +104,61 @@ class ReadyToEat(Food):
 
 ###############################################################################
 
+
 class Menu(IMenu):
     def __init__(self):
         self._menu = []
+
+    def has_item(self, item: str):
+        '''Checks if a food item is in the menu.'''
+
+        if type(item) is not str:
+            raise TypeError("Item must be a string.")
+
+        return any(
+            food_item[1].lower() == item.strip().lower()
+            for food_item in self._menu)
+
+    def add_item(self, item: Food, quantity: int):
+        '''Adds a food item and its quantity to the menu. Quantity should be greater than zero.'''
+        
+        if not isinstance(item, Food):
+            raise TypeError("Item must be a Food object")
+
+        if type(quantity) is not int:
+            raise TypeError("Quantity must be an integer.")
+
+        if quantity <= 0:
+            raise InvalidQuantityError("Quantity should be greater than zero.")
+
+
+
+        menu = self._menu
+        entry = [item.food_type, item.name, item.price]
+
+        if self.has_item(item.name):
+            for food_item in self._menu:
+                if food_item[1].lower() == item.name.lower():
+                    if food_item[2] != item.price:
+                        raise PriceMismatchError(f"{item.name} already exists in the menu with a different price. Please update the price instead.")
+                    food_item[3] += quantity
+                    return f"{item.name} quantity has been updated to {food_item[3]}"
+
+        entry.append(quantity)
+        menu.append(entry)
+        
+
+        return f"{item.name} has been added to the menu"
+
+    def remove_item(self, item_name: str):
+        '''Removes a food item from the menu'''
+
+        if not self._menu:
+            raise EmptyMenuError("Cannot remove a food item. The menu is empty")
+
+        if type(item_name) is not str:
+            raise TypeError("Item name must be a string.")
+        
 
     def add_item(self, item: Food, quantity: int):
 
@@ -90,6 +192,34 @@ class Menu(IMenu):
                 menu.remove(item)
 
                 return f"{item_name} has been removed from the menu"
+
+        raise ItemNotFoundError(f"{item_name} doesn't exist in the menu")
+
+    @property
+    def menu(self):
+        '''Returns the menu including the temporarily out of stock items'''
+        
+        if not self._menu:
+            raise EmptyMenuError("Menu is empty.")
+
+        return self._menu.copy()
+
+    
+
+    @property
+    def available_items(self):
+        '''Returns the available food items in the canteen'''
+
+        if not self._menu:
+            raise EmptyMenuError("Menu is empty. Add more food items.")
+
+        items_available_list = []
+
+        for item in self._menu:
+            if item[3] > 0:
+                items_available_list.append(item)
+
+        return items_available_list
 
         raise ValueError(f"{item_name} doesn't exist in the menu")
 
@@ -136,6 +266,10 @@ class Menu(IMenu):
 
     @property
     def unavailable_items(self):
+        '''Returns the unavailable food items in the canteen'''
+
+        if not self._menu:
+            raise EmptyMenuError("Menu is empty. Add more food items")
 
         if not self._menu:
             raise ValueError("Menu is empty. Add more food items")

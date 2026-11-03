@@ -17,6 +17,11 @@ from abc import ABC, abstractmethod
 
 class IMenu(ABC):
     @abstractmethod
+    def has_item(self, item: str):
+        '''Checks if a food item is in the menu.'''
+        pass
+
+    @abstractmethod
     def add_item(self, item, quantity: int):
         '''Adds food item and its quantity to the menu. The quantity shouldn't be zero or negative'''
         pass
@@ -47,16 +52,58 @@ class IMenu(ABC):
 class ICustomer(ABC):
     ## customer names A, B, Cs (i think during testing rani)
 
+    @property
     @abstractmethod
-    def sample_func(self):
+    def name(self) -> str:
+        """Returns the customer's name."""
+        pass
+
+    @property
+    @abstractmethod
+    def customer_type(self) -> str:
+        """Returns the customer's category."""
+        pass
+    ###
+
+class IOrder(ABC):
+
+    @abstractmethod
+    def create_order(self, order_number: str, item: str) -> None:
+        """Create a new order."""
+        pass
+
+    @abstractmethod
+    def cancel_order(self, order_number: str) -> None:
+        """Cancel an existing order."""
+        pass
+
+    @property
+    @abstractmethod
+    def active_orders(self) -> tuple:
+        """Return tuple of active orders."""
+        pass
+
+    @property
+    @abstractmethod
+    def total(self) -> float:
+        """Return the total amount of the order."""
         pass
 
 class IPayment(ABC):
-    ## cash
-    ## e-wallet
+    @property
+    @abstractmethod
+    def method(self) -> str:
+        """Return 'cash' or 'e-wallet'."""
+        pass
 
     @abstractmethod
-    def sample_func(self):
+    def pay(self, order: "IOrder") -> float:
+        """Pay once for an order that implements IOrder.
+
+        Returns cash change (cash) or 0.0 (e-wallet), in pesos.
+        Raises ValueError for invalid order or amount.
+        Raises CanteenError for insufficient funds or repeat payment.
+        """
         pass
 
 class CanteenError(Exception):
@@ -79,3 +126,5 @@ class IKitchen(ABC):
     def pending_orders(self) -> tuple:
         """Return tuple of pending orders."""
         pass
+
+
