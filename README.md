@@ -89,13 +89,13 @@ Replace `test_payment.py` with another test filename to test a different module.
 
 The system follows a contract-based architecture:
 
-- **Abstraction:** Each module implements an ABC from `contracts/`.
+- **Abstraction:** Each module implements an Abstract Base Class (ABC) from the shared `contracts` package.
 - **Encapsulation:** Internal attributes and read-only properties protect object data.
 - **Inheritance and Polymorphism:** Classes implement shared contracts, allowing compatible objects to be used interchangeably.
-- **Validation and Exceptions:** Invalid inputs use `ValueError`, while business-rule violations use the shared `CanteenError`.
-- **Independent Testing:** Test doubles, such as `FakeOrder`, implement shared contracts to test modules without importing teammates' concrete classes.
+- **Validation and Exceptions:** Invalid inputs raise `ValueError`, while business-rule violations raise `CanteenError` or its subclasses.
+- **Independent Testing:** Test doubles, such as `FakeOrder` and `FakeMenu`, implement shared contracts to test modules independently without relying on teammates' concrete implementations.
 
-Modules import only shared contracts and the Python standard library. Concrete implementations are connected through `main.py`.
+Modules import only shared contracts and the Python standard library. The concrete implementations are intended to be connected through `main.py` during system integration.
 
 ## Contract Change Log
 
