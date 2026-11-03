@@ -116,7 +116,7 @@ __pycache__/
 *.pyc
 ```
 
-This keeps the repository organized and prevents unnecessary changes or conflicts involving generated files. Previously tracked cache files must be removed from Git tracking separately.
+This keeps the repository organized and prevents unnecessary changes or conflicts involving generated files.
 
 ## Development Tools and References
 
