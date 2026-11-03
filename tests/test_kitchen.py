@@ -38,7 +38,7 @@ class TestKitchenQueue(unittest.TestCase):
     def test_kitchen_full_error(self):
         """Test that KitchenFullError raises when capacity is breached."""
         self.kitchen.add_to_queue("O1", "Burger")
-        self.kitchen.add_to_queue("O2", "Fries")
+        self.kitchen.add_to_queue("O2", "Adobo")
         
         with self.assertRaises(KitchenFullError):
             self.kitchen.add_to_queue("O3", "Soda")
