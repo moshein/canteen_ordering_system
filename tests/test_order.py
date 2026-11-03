@@ -22,6 +22,9 @@ class FakeMenu(IMenu):
             ["Ready-To-Eat", "Iced Tea", 25.00, 8]
         ]
 
+    def has_item(self, item: str):
+        pass
+
     def add_item(self, item, quantity: int):
         pass
 
