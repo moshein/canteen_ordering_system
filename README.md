@@ -126,8 +126,16 @@ This keeps the repository organized and prevents unnecessary changes or conflict
 | VS Code | Code editing and debugging |
 | Git and GitHub | Version control and collaboration |
 | Python `unittest` | Automated unit testing |
-| ChatGPT (OpenAI) | Guidance on OOP concepts, debugging, contracts, unit testing, Git workflows, and documentation |
+| ChatGPT (OpenAI) | Learning assistance, debugging, testing, system integration, and documentation |
 
-Team members are responsible for understanding and explaining their own implementations. 
+### AI Assistance Disclosure
 
+Although we had a basic understanding of Object-Oriented Programming, working together on a project like this was not as easy as we first thought. We encountered challenges along the way, especially when testing and connecting our modules. Since some concepts were still new to us, we used ChatGPT (OpenAI) to help us better understand them, figure out our mistakes, and learn how to make things work in the following areas:
+
+- **Unit Testing:** We initially struggled with understanding how unit testing works. AI helped us learn Python's `unittest` framework, create meaningful test cases, and use fake classes to test our modules independently.
+- **System Integration (`main.py`):** At first, we thought integrating our modules would be as simple as calling functions. However, we learned that connecting different classes and passing objects between modules required a better understanding of their shared contracts. AI guided us through this process.
+- **Exception Handling:** We had difficulty demonstrating business-rule violations without interrupting the program. AI introduced us to using `try-except` blocks to catch and handle expected errors gracefully while allowing the demonstration to continue.
+- **Debugging and Code Review:** AI helped us identify mistakes, understand error messages, and improve our implementations when we encountered problems during development.
+
+We remain fully responsible for understanding, testing, and explaining our work. All AI-assisted suggestions and implementations are subject to our own review and verification, ensuring that we can confidently demonstrate and justify the functionality of our respective modules.
 
