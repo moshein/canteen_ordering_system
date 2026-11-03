@@ -17,6 +17,11 @@ from abc import ABC, abstractmethod
 
 class IMenu(ABC):
     @abstractmethod
+    def has_item(self, item: str):
+        '''Checks if a food item is in the menu.'''
+        pass
+
+    @abstractmethod
     def add_item(self, item, quantity: int):
         '''Adds food item and its quantity to the menu. The quantity shouldn't be zero or negative'''
         pass
