@@ -13,11 +13,11 @@ The Canteen Ordering System is a Python-based application that simulates food or
 
 | Module | Owner | Contract |
 |---|---|---|
-| Menu | Montimor | `IMenu` |
-| Customer | Lauzon | `ICustomer` |
-| Order | Casuboc | `IOrder` |
-| Payment | Odarve | `IPayment` |
-| Kitchen | Macaya | `IKitchen` |
+| Menu | Montimor, Oshein | `IMenu` |
+| Customer | Lauzon, Nelle | `ICustomer` |
+| Order | Casuboc, Ruena | `IOrder` |
+| Payment | Odarve, Love | `IPayment` |
+| Kitchen | Macaya, Jay Mark | `IKitchen` |
 
 
 ## Project Structure
