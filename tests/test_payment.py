@@ -133,7 +133,3 @@ class TestPayment(unittest.TestCase):
     def test_str_descriptions(self):
         self.assertIn("Cash payment", str(CashPayment(200)))
         self.assertIn("E-wallet balance", str(EWalletPayment(500)))
-
-
-if __name__ == "__main__":
-    unittest.main()
